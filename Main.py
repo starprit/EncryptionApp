@@ -26,5 +26,7 @@ if __name__ == '__main__':
 
     print (stop - start)
 
+    #gowno
+
     # cipher.decryptFile('test2.encrypt')
 
