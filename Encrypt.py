@@ -52,7 +52,7 @@ class AESCipher(object):
                      encryptString.decode()
             f.write(string)
             print("Encrypt of a file success")
-
+            f.close()
     def decrypt(self, key, enc):
         # zmiany
         enc = base64.b64decode(enc)
@@ -64,6 +64,7 @@ class AESCipher(object):
 
         file = open(path, "r")
         encryptArray = file.readlines()
+        file.close()
         # print("Name of the file: ", fo.name)
         hashKey = self.decrypt(self.globalKey, encryptArray[0].strip('\n').encode())
         size = self.decrypt(hashKey, encryptArray[1].strip('\n').encode())
@@ -72,19 +73,19 @@ class AESCipher(object):
 
         print(hashKey)
         parse = [int(i) for i in decodeString]
-        decPath = name.decode().replace('test2', 'decoded')
+        decPath = name.decode().replace('test', 'decoded')
         newFile = open(decPath, "wb")
         # write to file
         for byte in parse:
             newFile.write(byte.to_bytes(1, byteorder='big'))
 
+        newFile.close()
         print()
+        print(int(size.decode()) == os.stat(decPath).st_size)
         print(size.decode(), os.stat(decPath).st_size)
         print("Decode of a file sucess")
         print()
-        print(os.stat('decoded.jpg').st_size)
-        print(os.path.getsize('decoded.jpg'))
-        print(os.path.getsize('test2.jpg'))
+
 
     def pad(self, s):
         return s + (self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs).encode()
