@@ -20,13 +20,15 @@ if __name__ == '__main__':
     key = 'siemakurwozajebanawdupe4567624//dsa5'
     cipher = AESCipher(key)
  #43.354206684931505
-    cipher.encryptFile('test2.rar')
+    cipher.encryptFile('test5.mkv')
 
+    cipher.decryptFile('test5.encrypt')
+    #
+    # cipher.compare('test2.jpg', 'decoded2.rar')
     stop = timeit.default_timer()
 
     print (stop - start)
 
     #gowno
 
-    # cipher.decryptFile('test2.encrypt')
 

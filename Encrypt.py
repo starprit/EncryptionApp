@@ -32,27 +32,31 @@ class AESCipher(object):
         string = ''
         print(hashKey)
 
+        out_file = open(str(basename + '.encrypt'), 'wb')  # open for [w]riting as [b]inary
+
         with open(path, "rb") as file:
-            flag = True
+            out_file.write(encryptKey + b'\n')
+            out_file.write(size + b'\n')
+            out_file.write(name + b'\n')
             while True:
-                byte = file.read(1)
+                byte = file.read()
                 if not byte:
                     break
-                if flag:
-                    string = str(ord(byte))
-                    flag = False
-                else:
-                    string += ";" + str(ord(byte))
-        encryptString = self.encrypt(hashKey, string.encode())
+                out_file.write(self.encrypt(hashKey, byte) + b'\n')
 
-        with open(str(basename + '.encrypt'), 'w') as f:
-            string = encryptKey.decode() + '\n' + \
-                     size.decode() + '\n' + \
-                     name.decode() + '\n' + \
-                     encryptString.decode()
-            f.write(string)
-            print("Encrypt of a file success")
-            f.close()
+        file.close()
+                # else:
+                #     string += ";" + str(ord(byte))
+        # encryptString = self.encrypt(hashKey, string.encode())
+
+        # with open(str(basename + '.encrypt'), 'w') as f:
+        #     string = encryptKey.decode() + '\n' + \
+        #              size.decode() + '\n' + \
+        #              name.decode() + '\n' + \
+        #              encryptString.decode()
+        #     f.write(string)
+        #     print("Encrypt of a file success")
+        out_file.close()
     def decrypt(self, key, enc):
         # zmiany
         enc = base64.b64decode(enc)
@@ -66,18 +70,31 @@ class AESCipher(object):
         encryptArray = file.readlines()
         file.close()
         # print("Name of the file: ", fo.name)
+
+        # with open(path, "rb") as f:
+        #     while True:
+        #         byte = file.read(512)
+        #         if not byte:
+        #             break
+        #         out_file.write(self.encrypt(hashKey, byte) + b'\n')
+        #
+        # f.close()
+
+
         hashKey = self.decrypt(self.globalKey, encryptArray[0].strip('\n').encode())
         size = self.decrypt(hashKey, encryptArray[1].strip('\n').encode())
         name = self.decrypt(hashKey, encryptArray[2].strip('\n').encode())
-        decodeString = self.decrypt(hashKey, encryptArray[3].encode()).decode().split(';')
+        # decodeString = self.decrypt(hashKey, encryptArray[3].encode()).decode().split(';')
 
         print(hashKey)
-        parse = [int(i) for i in decodeString]
+        # parse = [int(i) for i in decodeString]
         decPath = name.decode().replace('test', 'decoded')
         newFile = open(decPath, "wb")
         # write to file
-        for byte in parse:
-            newFile.write(byte.to_bytes(1, byteorder='big'))
+        for byte in range(3, len(encryptArray)):
+            newFile.write(self.decrypt(hashKey, encryptArray[byte]))
+            print("yes")
+            # newFile.write(byte.to_bytes(1, byteorder='big'))
 
         newFile.close()
         print()
