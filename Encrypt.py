@@ -28,11 +28,12 @@ class AESCipher(object):
         # print(os.stat('decoded.jpg').st_size)
         size = self.encrypt(hashKey, str(os.stat(path).st_size).encode())
         name = self.encrypt(hashKey, os.path.basename(path).encode())
-        basename = os.path.splitext(os.path.basename(path))[0]
+        # basename = os.path.splitext(os.path.basename(path))[0]
+        basename = os.path.dirname(os.path.abspath(path)) + '\\' + os.path.splitext(os.path.basename(path))[0]
         string = ''
-        print(hashKey)
+        print(basename)
 
-        out_file = open(str(basename + '.encrypt'), 'wb')  # open for [w]riting as [b]inary
+        out_file = open(str(basename + '.enc'), 'wb')  # open for [w]riting as [b]inary
 
         with open(path, "rb") as file:
             out_file.write(encryptKey + b'\n')
