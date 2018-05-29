@@ -1,0 +1,132 @@
+#:kivy 1.10.0
+
+<Gui>:
+    do_default_tab: False
+
+    TabbedPanelItem:
+        on_release: root.changeCrypt()
+        text: 'Encryption'
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 10
+            BoxLayout:
+                size_hint_max_y: 30
+                Label:
+                    size_hint_max_x: 80
+                    text: 'Password:'
+                Label:
+                    id: labelinput
+                    text_size: self.size
+                    valign: "middle"
+                    text: 'password'
+            TextInput:
+                id: textinput
+                size_hint_max_y: 30
+                text: 'Enter password'
+                multiline: False
+                on_focus: root.clear()
+                on_text_validate: root.setPassword()
+
+            BoxLayout:
+                size_hint_max_y: 30
+                Label:
+                    size_hint_max_x: 40
+                    text: 'File:'
+                Label:
+                    id: filepath
+                    text_size: self.size
+                    valign: "middle"
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 20
+                Button:
+                    size_hint_max_y: 60
+                    text: 'Choose file'
+                    on_release: root.file()
+                Button:
+                    size_hint_max_y: 60
+                    text: 'ENCRYPT FILE'
+                    on_release: root.encrypt()
+    TabbedPanelItem:
+        on_release: root.changeCrypt()
+        text: 'Decryption'
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 10
+            BoxLayout:
+                size_hint_max_y: 30
+                Label:
+                    size_hint_max_x: 80
+                    text: 'Password:'
+                Label:
+                    id: labelinputdecrypt
+                    text_size: self.size
+                    valign: "middle"
+                    text: 'password'
+            TextInput:
+                id: textinputdecrypt
+                size_hint_max_y: 30
+                text: 'Enter password'
+                multiline: False
+                on_focus: root.clearDecrypt()
+                on_text_validate: root.setPasswordDecrypt()
+
+            BoxLayout:
+                size_hint_max_y: 30
+                Label:
+                    size_hint_max_x: 40
+                    text: 'File:'
+                Label:
+                    id: filepathdecrypt
+                    text_size: self.size
+                    valign: "middle"
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 20
+                Button:
+                    size_hint_max_y: 60
+                    text: 'Choose file'
+    #                on_release: root.manager.current = 'file'
+                    on_release: root.file()
+                Button:
+                    size_hint_max_y: 60
+                    text: 'DECRYPT FILE'
+                    on_release: root.decrypt()
+<FileScreen>:
+    BoxLayout:
+        padding: 10
+        spacing: 10
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_max_y: 30
+            Label:
+                size_hint_max_x: 80
+                text: 'Directory: '
+            TextInput:
+                id: pathinput
+                multiline: False
+                on_text_validate: root.setFileChooser(pathinput.text)
+        FileChooserListView:
+            show_hidden: False
+            id: filechooser
+            on_selection: root.selected(filechooser.selection)
+        BoxLayout:
+            size_hint_max_y: 30
+            Label:
+                size_hint_max_x: 50
+                text: 'File:'
+            Label:
+                text_size: self.size
+                valign: "middle"
+                id: labelchooser
+        Button:
+            size_hint_max_y: 30
+            text: 'Accept'
+            on_release: root.accept()
+        Button:
+            size_hint_max_y: 30
+            text: 'Back'
+            on_release: root.back()
+
